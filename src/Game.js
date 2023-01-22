@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import GameOver from "./GameOver";
 import "./Game.css";
+import "./Score.css";
 
 function Game() {
   const canvasRef = useRef(null);
@@ -12,6 +13,7 @@ function Game() {
   const [gameStarted, setGameStarted] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
   const [speed, setSpeed] = useState(100);
+  const [specialFood, setSpecialFood] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -31,9 +33,13 @@ function Game() {
     context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     context.fillStyle = "green";
     snake.forEach(([x, y]) => context.fillRect(x, y, 1, 1));
-    context.fillStyle = "red";
+    if (specialFood) {
+      context.fillStyle = "yellow";
+    } else {
+      context.fillStyle = "red";
+    }
     context.fillRect(food[0], food[1], 1, 1);
-  }, [snake, food]);
+  }, [snake, food, specialFood]);
 
   useEffect(() => {
     if (!gameStarted) return;
@@ -95,6 +101,32 @@ function Game() {
     food,
     score,
     speed,
+    canvasRef.current?.width,
+    canvasRef.current?.height,
+  ]);
+
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    if (snake[0][0] === food[0] && snake[0][1] === food[1]) {
+      const chance = Math.random();
+      if (chance <= 0.15) {
+        setSpecialFood(true);
+      } else {
+        setSpecialFood(false);
+      }
+      if (specialFood) {
+        setScore(score + 5);
+      }
+      setFood([
+        Math.floor((Math.random() * canvasRef.current.width) / 20),
+        Math.floor((Math.random() * canvasRef.current.height) / 20),
+      ]);
+    }
+  }, [
+    snake,
+    food,
+    specialFood,
+    score,
     canvasRef.current?.width,
     canvasRef.current?.height,
   ]);
