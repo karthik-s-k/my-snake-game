@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "./GameOver.css";
+import "./../style/GameOver.css";
 
 function GameOver({ score }) {
   useEffect(() => {

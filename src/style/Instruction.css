@@ -1,0 +1,39 @@
+.instruction-container .instructions {
+  display: none;
+  position: absolute;
+  width: 55%;
+  bottom: 18%;
+  right: -100%;
+  max-height: 50%;
+  overflow: auto;
+  background-color: #f8f8ff;
+  border: 1px solid #6495ed;
+  border-radius: 5px;
+}
+
+.instruction-container .instruction-button {
+  position: absolute;
+  right: 2%;
+  bottom: 15%;
+  border-radius: 5px;
+  background-color: #6495ed;
+}
+
+.instruction-container .instructions.show {
+  display: block;
+  right: 2%;
+  animation: fadeIn 1s ease-out;
+}
+
+.instruction-container .instructions.show li {
+  padding: 4px 6px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

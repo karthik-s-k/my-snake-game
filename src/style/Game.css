@@ -21,6 +21,22 @@ canvas {
   z-index: 2;
 }
 
+.food-effect-animation {
+  animation: food-effect 0.5s ease-out;
+}
+
+@keyframes food-effect {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .collision-animation {
   animation: shake 0.5s;
 }

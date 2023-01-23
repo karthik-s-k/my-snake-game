@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
+import "./../style/Game.css";
+import Score from "./Score";
+import Instruction from "./Instruction";
 import GameOver from "./GameOver";
-import "./Game.css";
-import "./Score.css";
 
 function Game() {
   const canvasRef = useRef(null);
@@ -15,8 +16,10 @@ function Game() {
   const [speed, setSpeed] = useState(100);
   const [specialFood, setSpecialFood] = useState(false);
   const [collisionAnimation, setCollisionAnimation] = useState(false);
+  const [foodEffect, setFoodEffect] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
 
-  //Set/resize canvas size
+  // Set/resize canvas size
   useEffect(() => {
     const handleResize = () => {
       canvasRef.current.width = window.innerWidth * 0.75;
@@ -28,7 +31,7 @@ function Game() {
     };
   }, [window.innerWidth, window.innerHeight]);
 
-  //Set snake, food and special food on canvas
+  // Set snake, food and special food on canvas
   useEffect(() => {
     if (!canvasRef.current) return;
     const context = canvasRef.current.getContext("2d");
@@ -44,7 +47,7 @@ function Game() {
     context.fillRect(food[0], food[1], 1, 1);
   }, [snake, food, specialFood]);
 
-  //Read arrow key press and start game
+  // Read arrow key press and start game
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (!gameStarted) return; // check if the game has started
@@ -75,7 +78,7 @@ function Game() {
     };
   }, []);
 
-  //Move sanke
+  // Move sanke
   useEffect(() => {
     if (!gameStarted) return;
     const move = setInterval(() => {
@@ -90,10 +93,19 @@ function Game() {
     return () => clearInterval(move);
   }, [gameStarted, direction, snake, speed]);
 
-  //Set food, special food and score
+  // Set food, special food and score
   useEffect(() => {
     if (!canvasRef.current) return;
     if (snake[0][0] === food[0] && snake[0][1] === food[1]) {
+      // // Sound effect when snake eats food
+      // const eatSound = document.getElementById("eat-sound");
+      // eatSound.currentTime = 0;
+      // eatSound.play();
+
+      // Animate canvas when snake eats food
+      setFoodEffect(true);
+
+      // Generate special food
       const chance = Math.random();
       if (chance <= 0.15) {
         setSpecialFood(true);
@@ -105,6 +117,7 @@ function Game() {
       } else {
         setScore(score + 1);
       }
+
       setFood([
         Math.floor((Math.random() * canvasRef.current.width) / 20),
         Math.floor((Math.random() * canvasRef.current.height) / 20),
@@ -122,7 +135,20 @@ function Game() {
     canvasRef.current?.height,
   ]);
 
-  //Collision and game over check
+  // Animate when snake eats food
+  useEffect(() => {
+    if (!foodEffect) return;
+    // play effect here
+    // example: adding a class to canvas to trigger css animation
+    canvasRef.current.classList.add("food-effect-animation");
+    setTimeout(() => {
+      // remove class after animation completes
+      canvasRef.current.classList.remove("food-effect-animation");
+      setFoodEffect(false);
+    }, 500);
+  }, [foodEffect, canvasRef]);
+
+  // Collision and game over check
   useEffect(() => {
     if (!canvasRef.current) return;
     if (
@@ -161,12 +187,20 @@ function Game() {
     }, 500);
   }, [collisionAnimation]);
 
-  //Clear interval to stop the game
+  // Clear interval to stop the game
   useEffect(() => {
     if (gameOver) {
       clearInterval(intervalId);
     }
   }, [gameOver, intervalId]);
+
+  function showInstructionHandleMouseEnter() {
+    setShowInstructions(true);
+  }
+
+  function showInstructionHandleMouseLeave() {
+    setShowInstructions(false);
+  }
 
   return (
     <div>
@@ -176,9 +210,12 @@ function Game() {
         height={window.innerHeight * 0.8}
         className={canvasClass}
       />
-      <div className="score-container">
-        <p>Score: {score}</p>
-      </div>
+      <Score score={score} />
+      <Instruction
+        showInstructions={showInstructions}
+        showInstructionHandleMouseEnter={showInstructionHandleMouseEnter}
+        showInstructionHandleMouseLeave={showInstructionHandleMouseLeave}
+      />
       {useEffect(() => {
         if (!canvasRef.current) return;
         setFood([
@@ -186,6 +223,7 @@ function Game() {
           Math.floor((Math.random() * canvasRef.current.height) / 20),
         ]);
       }, [canvasRef.current?.width, canvasRef.current?.height])}
+      {/* <audio id="eat-sound" src="./audio/eat-sound.mp3"></audio> */}
       {gameOver && (
         <div className={gameOver ? "overlay" : "hidden"}>
           <GameOver score={score} />
