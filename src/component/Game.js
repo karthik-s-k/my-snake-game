@@ -4,6 +4,14 @@ import Score from "./Score";
 import Instruction from "./Instruction";
 import GameOver from "./GameOver";
 
+import appleIcon from "./../icons/apple-20.png";
+import bananaIcon from "./../icons/banana-20.png";
+import kiwiIcon from "./../icons/kiwi-20.png";
+import burgerIcon from "./../icons/hamburger-20.png";
+import chickenIcon from "./../icons/fried-chicken-20.png";
+import cupCakeIcon from "./../icons/cupcake-20.png";
+import pizzaIcon from "./../icons/pizza-20.png";
+
 function Game() {
   const canvasRef = useRef(null);
   const [snake, setSnake] = useState([[0, 0]]);
@@ -18,6 +26,15 @@ function Game() {
   const [collisionAnimation, setCollisionAnimation] = useState(false);
   const [foodEffect, setFoodEffect] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
+  const [prevFood, setPrevFood] = useState([-1, -1]);
+  const foodImages = [appleIcon, bananaIcon, kiwiIcon];
+  const [selectedFoodImage, setSelectedFoodImage] = useState(
+    foodImages[Math.floor(Math.random() * foodImages.length)]
+  );
+  const specialFoodImages = [burgerIcon, chickenIcon, cupCakeIcon, pizzaIcon];
+  const [selectedSpecialFoodImage, setSelectedSpecialFoodImage] = useState(
+    specialFoodImages[Math.floor(Math.random() * specialFoodImages.length)]
+  );
 
   // Set/resize canvas size
   useEffect(() => {
@@ -36,16 +53,25 @@ function Game() {
     if (!canvasRef.current) return;
     const context = canvasRef.current.getContext("2d");
     context.setTransform(20, 0, 0, 20, 0, 0);
-    context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     context.fillStyle = "green";
     snake.forEach(([x, y]) => context.fillRect(x, y, 1, 1));
-    if (specialFood) {
-      context.fillStyle = "yellow";
-    } else {
-      context.fillStyle = "red";
+    if (gameStarted) {
+      // Create a new Image element
+      const foodImage = new Image();
+      if (specialFood) {
+        foodImage.src = selectedSpecialFoodImage;
+      } else {
+        foodImage.src = selectedFoodImage;
+      }
+      foodImage.onload = () => {
+        if (prevFood[0] !== -1) {
+          context.clearRect(prevFood[0], prevFood[1], 1, 1);
+        }
+        context.drawImage(foodImage, food[0], food[1], 1, 1);
+        setPrevFood(food);
+      };
     }
-    context.fillRect(food[0], food[1], 1, 1);
-  }, [snake, food, specialFood]);
+  }, [snake, food, specialFood, prevFood]);
 
   // Read arrow key press and start game
   useEffect(() => {
@@ -88,6 +114,15 @@ function Game() {
       ];
       const newSnake = [newSnakeHead, ...snake.slice(0, -1)];
       setSnake(newSnake);
+
+      // Clear the previous position of the snake's tail
+      const context = canvasRef.current.getContext("2d");
+      context.clearRect(
+        snake[snake.length - 1][0],
+        snake[snake.length - 1][1],
+        1,
+        1
+      );
     }, speed);
     setIntervalId(move);
     return () => clearInterval(move);
@@ -107,15 +142,23 @@ function Game() {
 
       // Generate special food
       const chance = Math.random();
-      if (chance <= 0.15) {
+      if (chance <= 0.25) {
         setSpecialFood(true);
       } else {
         setSpecialFood(false);
       }
       if (specialFood) {
         setScore(score + 5);
+        const randomSpecialFoodImage =
+          specialFoodImages[
+            Math.floor(Math.random() * specialFoodImages.length)
+          ];
+        setSelectedSpecialFoodImage(randomSpecialFoodImage);
       } else {
         setScore(score + 1);
+        const randomFoodImage =
+          foodImages[Math.floor(Math.random() * foodImages.length)];
+        setSelectedFoodImage(randomFoodImage);
       }
 
       setFood([

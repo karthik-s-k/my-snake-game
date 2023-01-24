@@ -32,7 +32,7 @@ function Instruction(props) {
         </li>
         <li>
           The game also includes a special food (yellow block) that appears with
-          a 15% chance.
+          a 25% chance.
         </li>
         <li>
           When the snake eats special food, score will be current score plus 5
