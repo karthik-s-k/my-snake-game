@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./../style/Game.css";
-import Score from "./Score";
-import Instruction from "./Instruction";
+import ActionContainer from "./ActionContainer";
 import GameOver from "./GameOver";
 
 import appleIcon from "./../icons/apple-20.png";
@@ -21,7 +20,7 @@ function Game() {
   const [score, setScore] = useState(0);
   const [gameStarted, setGameStarted] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
-  const [speed, setSpeed] = useState(100);
+  const [speed, setSpeed] = useState(70);
   const [specialFood, setSpecialFood] = useState(false);
   const [collisionAnimation, setCollisionAnimation] = useState(false);
   const [foodEffect, setFoodEffect] = useState(false);
@@ -35,12 +34,14 @@ function Game() {
   const [selectedSpecialFoodImage, setSelectedSpecialFoodImage] = useState(
     specialFoodImages[Math.floor(Math.random() * specialFoodImages.length)]
   );
+  const [foodEatenCount, setFoodEatenCount] = useState(0);
+  const [specialFoodEatenCount, setSpecialFoodEatenCount] = useState(0);
 
   // Set/resize canvas size
   useEffect(() => {
     const handleResize = () => {
       canvasRef.current.width = window.innerWidth * 0.75;
-      canvasRef.current.height = window.innerHeight * 0.8;
+      canvasRef.current.height = window.innerHeight * 0.9;
     };
     window.addEventListener("resize", handleResize);
     return () => {
@@ -53,7 +54,7 @@ function Game() {
     if (!canvasRef.current) return;
     const context = canvasRef.current.getContext("2d");
     context.setTransform(20, 0, 0, 20, 0, 0);
-    context.fillStyle = "green";
+    context.fillStyle = "white";
     snake.forEach(([x, y]) => context.fillRect(x, y, 1, 1));
     if (gameStarted) {
       // Create a new Image element
@@ -104,6 +105,14 @@ function Game() {
     };
   }, []);
 
+  const handleStartGame = () => {
+    setGameStarted(true);
+    setDirection([1, 0]);
+  };
+  const handleAIGame = () => {
+    console.log("AI Mode");
+  };
+
   // Move sanke
   useEffect(() => {
     if (!gameStarted) return;
@@ -148,6 +157,7 @@ function Game() {
         setSpecialFood(false);
       }
       if (specialFood) {
+        setSpecialFoodEatenCount(specialFoodEatenCount + 1);
         setScore(score + 5);
         const randomSpecialFoodImage =
           specialFoodImages[
@@ -155,6 +165,7 @@ function Game() {
           ];
         setSelectedSpecialFoodImage(randomSpecialFoodImage);
       } else {
+        setFoodEatenCount(foodEatenCount + 1);
         setScore(score + 1);
         const randomFoodImage =
           foodImages[Math.floor(Math.random() * foodImages.length)];
@@ -246,32 +257,29 @@ function Game() {
   }
 
   return (
-    <div>
-      <canvas
-        ref={canvasRef}
-        width={window.innerWidth * 0.75}
-        height={window.innerHeight * 0.8}
-        className={canvasClass}
-      />
-      <Score score={score} />
-      <Instruction
-        showInstructions={showInstructions}
-        showInstructionHandleMouseEnter={showInstructionHandleMouseEnter}
-        showInstructionHandleMouseLeave={showInstructionHandleMouseLeave}
-      />
-      {useEffect(() => {
-        if (!canvasRef.current) return;
-        setFood([
-          Math.floor((Math.random() * canvasRef.current.width) / 20),
-          Math.floor((Math.random() * canvasRef.current.height) / 20),
-        ]);
-      }, [canvasRef.current?.width, canvasRef.current?.height])}
-      {/* <audio id="eat-sound" src="./audio/eat-sound.mp3"></audio> */}
+    <div className="container">
       {gameOver && (
         <div className={gameOver ? "overlay" : "hidden"}>
           <GameOver score={score} />
         </div>
       )}
+      <canvas
+        ref={canvasRef}
+        width={window.innerWidth * 0.75}
+        height={window.innerHeight * 0.9}
+        className={canvasClass}
+      />
+      <ActionContainer
+        score={score}
+        foodEatenCount={foodEatenCount}
+        specialFoodEatenCount={specialFoodEatenCount}
+        showInstructions={showInstructions}
+        showInstructionHandleMouseEnter={showInstructionHandleMouseEnter}
+        showInstructionHandleMouseLeave={showInstructionHandleMouseLeave}
+        startGame={handleStartGame}
+        startAIGame={handleAIGame}
+      />
+      {/* <audio id="eat-sound" src="./audio/eat-sound.mp3"></audio> */}
     </div>
   );
 }

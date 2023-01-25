@@ -1,11 +1,23 @@
 #root {
   overflow: hidden;
+  background-color: black;
+}
+
+.container {
+  display: grid;
+  grid-template-areas: "canvas action-container";
+  grid-template-columns: 1fr 0.25fr;
 }
 
 canvas {
-  margin: 2% 0% 0% 2%;
-  background: #e0e0e0;
-  border: 3px solid #3f51b5;
+  grid-area: canvas;
+  margin: 2% 2%;
+  background: #606060;
+  border: 3px solid #4caf50;
+}
+
+.action-container {
+  grid-area: action-container;
 }
 
 .overlay {
@@ -18,7 +30,7 @@ canvas {
   bottom: 0;
   right: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 2;
+  z-index: 5;
 }
 
 .food-effect-animation {
@@ -74,5 +86,12 @@ canvas {
   }
   100% {
     transform: translate(1px, -2px) rotate(-1deg);
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .container {
+    grid-template-areas: "canvas";
+    grid-template-columns: 1fr;
   }
 }

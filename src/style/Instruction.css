@@ -2,21 +2,22 @@
   display: none;
   position: absolute;
   width: 55%;
-  bottom: 18%;
+  bottom: 21%;
   right: -100%;
   max-height: 50%;
   overflow: auto;
-  background-color: #f8f8ff;
-  border: 1px solid #6495ed;
+  color: #4caf50;
+  background-color: white;
+  border: 1px solid #4caf50;
   border-radius: 5px;
+  z-index: 2;
 }
 
-.instruction-container .instruction-button {
+.instruction-container .instruction-icon {
   position: absolute;
-  right: 2%;
   bottom: 15%;
-  border-radius: 5px;
-  background-color: #6495ed;
+  right: 2%;
+  cursor: pointer;
 }
 
 .instruction-container .instructions.show {
@@ -26,7 +27,7 @@
 }
 
 .instruction-container .instructions.show li {
-  padding: 4px 6px;
+  padding: 6px 8px;
 }
 
 @keyframes fadeIn {
@@ -35,6 +36,16 @@
   }
   to {
     opacity: 1;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .instruction-container .instructions {
+    bottom: 25%;
+  }
+
+  .instruction-container .instruction-icon {
+    bottom: 18%;
   }
 }
 

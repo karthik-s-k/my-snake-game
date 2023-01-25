@@ -1,10 +1,36 @@
 .score-container {
   position: absolute;
   top: 3%;
-  right: 2%;
-  padding: 3px 8px;
-  font-size: 1.25em;
-  font-weight: bold;
-  background-color: #eee;
+  right: 3%;
+  width: 10%;
+  font-weight: 600;
+  padding: 3px 8px 10px 8px;
   border-radius: 5px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  color: #4caf50;
+  background-color: white;
+}
+
+.score-container p {
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.score-container div {
+  padding: 1% 0%;
+}
+
+@media only screen and (max-width: 1000px) {
+  .score-container {
+    width: 15%;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .score-container {
+    display: none;
+  }
 }
