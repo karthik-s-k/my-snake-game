@@ -57,28 +57,27 @@ function Game() {
   useEffect(() => {
     if (!canvasRef.current) return;
     const context = canvasRef.current.getContext("2d");
-    context.setTransform(20, 0, 0, 20, 0, 0);
+    context.setTransform(CELL_SIZE, 0, 0, CELL_SIZE, 0, 0);
     context.fillStyle = "white";
     snake.forEach(([x, y]) => context.fillRect(x, y, 1, 1));
     if (gameStarted) {
       if (aiMode) {
-        // add logic here
-      } else {
-        // Create a new Image element
-        const foodImage = new Image();
-        if (specialFood) {
-          foodImage.src = selectedSpecialFoodImage;
-        } else {
-          foodImage.src = selectedFoodImage;
-        }
-        foodImage.onload = () => {
-          if (prevFood[0] !== -1) {
-            context.clearRect(prevFood[0], prevFood[1], 1, 1);
-          }
-          context.drawImage(foodImage, food[0], food[1], 1, 1);
-          setPrevFood(food);
-        };
+        aiModePathFinderWithoutObstacles();
       }
+      // Create a new Image element for food
+      const foodImage = new Image();
+      if (specialFood) {
+        foodImage.src = selectedSpecialFoodImage;
+      } else {
+        foodImage.src = selectedFoodImage;
+      }
+      foodImage.onload = () => {
+        if (prevFood[0] !== -1) {
+          context.clearRect(prevFood[0], prevFood[1], 1, 1);
+        }
+        context.drawImage(foodImage, food[0], food[1], 1, 1);
+        setPrevFood(food);
+      };
     }
   }, [
     snake,
@@ -122,7 +121,7 @@ function Game() {
     };
   }, []);
 
-  // Move sanke
+  // Move snake
   useEffect(() => {
     if (!gameStarted) return;
     const move = setInterval(() => {
@@ -186,7 +185,7 @@ function Game() {
         Math.floor((Math.random() * canvasRef.current.height) / CELL_SIZE),
       ]);
       setSnake((prev) => prev.concat([snake[snake.length - 1]]));
-      setSpeed(speed > 30 ? speed - 10 : 30);
+      setSpeed(!aiMode && speed > 30 ? speed - 10 : 30);
     }
   }, [
     snake,
@@ -200,6 +199,7 @@ function Game() {
     specialFoodImages,
     foodEatenCount,
     specialFoodEatenCount,
+    aiMode,
   ]);
 
   // Animate when snake eats food
@@ -225,15 +225,16 @@ function Game() {
       snake[0][1] > canvasRef.current.height / CELL_SIZE
     ) {
       handleCollision();
-      setGameOver(true);
     }
-    for (let i = 1; i < snake.length; i++) {
-      if (
-        snake[0][0] === snake[i][0] &&
-        snake[0][1] === snake[i][1] &&
-        i !== snake.length - 1
-      ) {
-        setGameOver(true);
+    if (!aiMode) {
+      for (let i = 1; i < snake.length; i++) {
+        if (
+          snake[0][0] === snake[i][0] &&
+          snake[0][1] === snake[i][1] &&
+          i !== snake.length - 1
+        ) {
+          setGameOver(true);
+        }
       }
     }
   }, [snake, gameOver, canvasRef.current?.width, canvasRef.current?.height]);
@@ -258,6 +259,7 @@ function Game() {
   useEffect(() => {
     if (gameOver) {
       clearInterval(intervalId);
+      setAiMode(false);
     }
   }, [gameOver, intervalId]);
 
@@ -275,8 +277,44 @@ function Game() {
   };
 
   const handleAIGame = () => {
+    setGameStarted(true);
     setAiMode(true);
   };
+
+  // Note: Snake moves over its own body
+  function aiModePathFinderWithoutObstacles() {
+    const matrix = [];
+    for (let row = 0; row < Math.floor(canvasRef.current.height); row++) {
+      matrix[row] = [];
+      for (let col = 0; col < Math.floor(canvasRef.current.width); col++) {
+        matrix[row][col] = 0;
+      }
+    }
+    const grid = new PF.Grid(
+      Math.floor(canvasRef.current.width),
+      Math.floor(canvasRef.current.height),
+      matrix
+    );
+    const finder = new PF.AStarFinder();
+    const path = finder.findPath(
+      snake[0][0],
+      snake[0][1],
+      food[0],
+      food[1],
+      grid
+    );
+    const nextMove = path[1] || path[0];
+    setSnake([nextMove, ...snake.slice(0, -1)]);
+
+    // Clear the previous position of the snake's tail
+    const context = canvasRef.current.getContext("2d");
+    context.clearRect(
+      snake[snake.length - 1][0],
+      snake[snake.length - 1][1],
+      1,
+      1
+    );
+  }
 
   return (
     <div className="container">
