@@ -11,7 +11,10 @@ import chickenIcon from "./../icons/fried-chicken-20.png";
 import cupCakeIcon from "./../icons/cupcake-20.png";
 import pizzaIcon from "./../icons/pizza-20.png";
 
+import * as PF from "pathfinding";
+
 function Game() {
+  const CELL_SIZE = 20;
   const canvasRef = useRef(null);
   const [snake, setSnake] = useState([[0, 0]]);
   const [food, setFood] = useState([5, 5]);
@@ -36,6 +39,7 @@ function Game() {
   );
   const [foodEatenCount, setFoodEatenCount] = useState(0);
   const [specialFoodEatenCount, setSpecialFoodEatenCount] = useState(0);
+  const [aiMode, setAiMode] = useState(false);
 
   // Set/resize canvas size
   useEffect(() => {
@@ -57,22 +61,35 @@ function Game() {
     context.fillStyle = "white";
     snake.forEach(([x, y]) => context.fillRect(x, y, 1, 1));
     if (gameStarted) {
-      // Create a new Image element
-      const foodImage = new Image();
-      if (specialFood) {
-        foodImage.src = selectedSpecialFoodImage;
+      if (aiMode) {
+        // add logic here
       } else {
-        foodImage.src = selectedFoodImage;
-      }
-      foodImage.onload = () => {
-        if (prevFood[0] !== -1) {
-          context.clearRect(prevFood[0], prevFood[1], 1, 1);
+        // Create a new Image element
+        const foodImage = new Image();
+        if (specialFood) {
+          foodImage.src = selectedSpecialFoodImage;
+        } else {
+          foodImage.src = selectedFoodImage;
         }
-        context.drawImage(foodImage, food[0], food[1], 1, 1);
-        setPrevFood(food);
-      };
+        foodImage.onload = () => {
+          if (prevFood[0] !== -1) {
+            context.clearRect(prevFood[0], prevFood[1], 1, 1);
+          }
+          context.drawImage(foodImage, food[0], food[1], 1, 1);
+          setPrevFood(food);
+        };
+      }
     }
-  }, [snake, food, specialFood, prevFood]);
+  }, [
+    snake,
+    food,
+    specialFood,
+    prevFood,
+    gameStarted,
+    selectedFoodImage,
+    selectedSpecialFoodImage,
+    aiMode,
+  ]);
 
   // Read arrow key press and start game
   useEffect(() => {
@@ -104,14 +121,6 @@ function Game() {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
-
-  const handleStartGame = () => {
-    setGameStarted(true);
-    setDirection([1, 0]);
-  };
-  const handleAIGame = () => {
-    console.log("AI Mode");
-  };
 
   // Move sanke
   useEffect(() => {
@@ -173,8 +182,8 @@ function Game() {
       }
 
       setFood([
-        Math.floor((Math.random() * canvasRef.current.width) / 20),
-        Math.floor((Math.random() * canvasRef.current.height) / 20),
+        Math.floor((Math.random() * canvasRef.current.width) / CELL_SIZE),
+        Math.floor((Math.random() * canvasRef.current.height) / CELL_SIZE),
       ]);
       setSnake((prev) => prev.concat([snake[snake.length - 1]]));
       setSpeed(speed > 30 ? speed - 10 : 30);
@@ -187,6 +196,10 @@ function Game() {
     speed,
     canvasRef.current?.width,
     canvasRef.current?.height,
+    foodImages,
+    specialFoodImages,
+    foodEatenCount,
+    specialFoodEatenCount,
   ]);
 
   // Animate when snake eats food
@@ -207,9 +220,9 @@ function Game() {
     if (!canvasRef.current) return;
     if (
       snake[0][0] < 0 ||
-      snake[0][0] > canvasRef.current.width / 20 ||
+      snake[0][0] > canvasRef.current.width / CELL_SIZE ||
       snake[0][1] < 0 ||
-      snake[0][1] > canvasRef.current.height / 20
+      snake[0][1] > canvasRef.current.height / CELL_SIZE
     ) {
       handleCollision();
       setGameOver(true);
@@ -255,6 +268,15 @@ function Game() {
   function showInstructionHandleMouseLeave() {
     setShowInstructions(false);
   }
+
+  const handleStartGame = () => {
+    setGameStarted(true);
+    setDirection([1, 0]);
+  };
+
+  const handleAIGame = () => {
+    setAiMode(true);
+  };
 
   return (
     <div className="container">

@@ -8,20 +8,20 @@
 }
 
 .start-game-button {
-  background-color: white;
+  background-color: #ededed;
   color: #4caf50;
   border: 1px solid #4caf50;
 }
 .start-game-button:hover {
   background-color: #4caf50;
-  color: white;
+  color: #ededed;
   border: 1px solid #4caf50;
 }
 
 .ai-mode-button {
   background-color: black;
   color: #4caf50;
-  border: 1px solid white;
+  border: 1px solid #ededed;
 }
 .ai-mode-button:hover {
   background-color: #4caf50;

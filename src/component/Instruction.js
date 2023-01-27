@@ -7,6 +7,7 @@ function Instruction(props) {
     <div className="instruction-container">
       <img
         src={infoIcon}
+        alt={"info"}
         className="instruction-icon"
         onMouseEnter={props.showInstructionHandleMouseEnter}
         onMouseLeave={props.showInstructionHandleMouseLeave}
