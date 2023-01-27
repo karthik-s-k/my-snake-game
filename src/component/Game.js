@@ -62,9 +62,9 @@ function Game() {
     snake.forEach(([x, y]) => context.fillRect(x, y, 1, 1));
     if (gameStarted) {
       if (aiMode) {
-        aiModePathFinderWithoutObstacles();
+        aiModePathFinder();
       }
-      // Create a new Image element for food
+      // Create a new image for food
       const foodImage = new Image();
       if (specialFood) {
         foodImage.src = selectedSpecialFoodImage;
@@ -93,7 +93,7 @@ function Game() {
   // Read arrow key press and start game
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (!gameStarted) return; // check if the game has started
+      if (!gameStarted) return;
       if (e.keyCode === 37) setDirection([-1, 0]);
       if (e.keyCode === 38) setDirection([0, -1]);
       if (e.keyCode === 39) setDirection([1, 0]);
@@ -205,11 +205,8 @@ function Game() {
   // Animate when snake eats food
   useEffect(() => {
     if (!foodEffect) return;
-    // play effect here
-    // example: adding a class to canvas to trigger css animation
     canvasRef.current.classList.add("food-effect-animation");
     setTimeout(() => {
-      // remove class after animation completes
       canvasRef.current.classList.remove("food-effect-animation");
       setFoodEffect(false);
     }, 500);
@@ -237,7 +234,13 @@ function Game() {
         }
       }
     }
-  }, [snake, gameOver, canvasRef.current?.width, canvasRef.current?.height]);
+  }, [
+    snake,
+    gameOver,
+    aiMode,
+    canvasRef.current?.width,
+    canvasRef.current?.height,
+  ]);
 
   // Check if the snake's head has collided with the canvas wall
   const handleCollision = () => {
@@ -281,21 +284,23 @@ function Game() {
     setAiMode(true);
   };
 
-  // Note: Snake moves over its own body
-  function aiModePathFinderWithoutObstacles() {
-    const matrix = [];
-    for (let row = 0; row < Math.floor(canvasRef.current.height); row++) {
-      matrix[row] = [];
-      for (let col = 0; col < Math.floor(canvasRef.current.width); col++) {
-        matrix[row][col] = 0;
-      }
-    }
+  // ai mode to find path between snake and food
+  function aiModePathFinder() {
     const grid = new PF.Grid(
       Math.floor(canvasRef.current.width),
-      Math.floor(canvasRef.current.height),
-      matrix
+      Math.floor(canvasRef.current.height)
     );
+    for (let i = 0; i < snake.length; i++) {
+      grid.setWalkableAt(snake[i][0], snake[i][1], false);
+    }
+
     const finder = new PF.AStarFinder();
+
+    // The predefined heuristics are PF.Heuristic.manhattan(default), PF.Heuristic.chebyshev, PF.Heuristic.euclidean and PF.Heuristic.octile.
+    // const finder = new PF.AStarFinder({
+    //   heuristic: PF.Heuristic.chebyshev,
+    // });
+
     const path = finder.findPath(
       snake[0][0],
       snake[0][1],
@@ -303,17 +308,22 @@ function Game() {
       food[1],
       grid
     );
-    const nextMove = path[1] || path[0];
-    setSnake([nextMove, ...snake.slice(0, -1)]);
+    if (path.length > 0) {
+      const nextMove = path[1] || path[0];
+      setSnake([nextMove, ...snake.slice(0, -1)]);
 
-    // Clear the previous position of the snake's tail
-    const context = canvasRef.current.getContext("2d");
-    context.clearRect(
-      snake[snake.length - 1][0],
-      snake[snake.length - 1][1],
-      1,
-      1
-    );
+      // Clear the previous position of the snake's tail
+      const context = canvasRef.current.getContext("2d");
+      context.clearRect(
+        snake[snake.length - 1][0],
+        snake[snake.length - 1][1],
+        1,
+        1
+      );
+    } else {
+      setAiMode(false);
+      setGameOver(true);
+    }
   }
 
   return (
