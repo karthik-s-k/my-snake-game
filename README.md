@@ -1,70 +1,64 @@
-# Getting Started with Create React App
+# my-snake-game (The Great Munch)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A fun snake-food game where the player controls a snake that moves around the screen and eats food, with the goal of growing as long as possible without running into the walls or its own body.
+The game is built in React JS, it uses the React hooks useState and useEffect to handle state updates and side effects.
 
-## Available Scripts
+The game has several features such as,
 
-In the project directory, you can run:
+- The size of the game canvas adjusts to the size of the browser window
+- The game has different types of food, some of which give a temporary boost of speed or make the snake grow faster
+- There is a game over state when the snake collides with the wall or its own body
+- The game has a score counter
+- The game has a option for auto play, where the snake moves automatically.
+- The game uses pathfinding library to find the shortest path to the food in auto play mode.
 
-### `npm start`
+## Getting Started
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+To get started, simply clone or download the repository and run the game locally on your machine.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+git clone https://github.com/karthik-s-k/my-snake-game.git
+cd my-game
 
-### `npm test`
+## Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+In order to run the game, you will need to have the following installed on your machine:
 
-### `npm run build`
+- Node.js
+- npm (or yarn)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Installing
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+To install the dependencies for the game, run the following command in the root directory of the project:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+npm install
+or
+yarn install
 
-### `npm run eject`
+## Running the game
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+To start the game, run the following command in the root directory of the project:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+npm start
+or
+yarn start
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Deployment
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+To deploy the game to a server, you can use a platform such as Heroku. First, create a new app on Heroku and link it to your Github repository. Then, set up the necessary environment variables and deploy the app.
 
-## Learn More
+## Built With
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- [React](https://reactjs.org/) - The JavaScript library used for building the user interface
+- [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) - The HTML5 canvas element used for rendering the game
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Author
 
-### Code Splitting
+- [Karthik SK](https://github.com/karthik-s-k)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## License
 
-### Analyzing the Bundle Size
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Credits
+PathFinding.js (https://github.com/qiao/PathFinding.js)
+Icons from FlatIcon & FreeIcons (https://www.flaticon.com/, https://freeicons.io/)
