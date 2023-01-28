@@ -11,12 +11,17 @@ Players can look forward to several exciting features, including:
 - A game over state triggered when the snake collides with the wall or its own body.
 - Overall, this game offers a challenging and engaging experience for players of all skill levels.
 
+## Auto play Mode
+
+- In PathFinding.js, the predefined heuristics are PF.Heuristic.manhattan, PF.Heuristic.chebyshev, PF.Heuristic.euclidean and PF.Heuristic.octile.
+- I am using the default, PF.Heuristic.manhattan to find the path between snake head and food in the canvas (avoiding the snake path over its body)
+
 ## Getting Started
 
 To get started, simply clone or download the repository and run the game locally on your machine.
 
-git clone https://github.com/karthik-s-k/my-snake-game.git
-cd my-snake-game
+- git clone https://github.com/karthik-s-k/my-snake-game.git
+- cd my-snake-game
 
 ## Prerequisites
 
@@ -29,30 +34,24 @@ In order to run the game, you will need to have the following installed on your 
 
 To install the dependencies for the game, run the following command in the root directory of the project:
 
-npm install
-or
-yarn install
+npm install or yarn install
 
 ## Running the game
 
 To start the game, run the following command in the root directory of the project:
 
-npm start
-or
-yarn start
+npm start or yarn start
 
 ## Deployment
 
 To deploy the game to GitHub pages, you need to build the project and push the built files to the gh-pages branch.
 
-npm run build
-or
-yarn build
+npm run build or yarn build
 
 Then, switch to gh-pages branch and push the files
 
-git checkout gh-pages
-git push origin gh-pages
+- git checkout gh-pages
+- git push origin gh-pages
 
 ## Built With
 
@@ -61,7 +60,7 @@ git push origin gh-pages
 
 ## Author
 
-- [Karthik SK](https://github.com/karthik-s-k)
+[Karthik SK](https://github.com/karthik-s-k)
 
 ## License
 
@@ -69,5 +68,5 @@ Feel free to use the code.
 
 ## Credits
 
-PathFinding.js (https://github.com/qiao/PathFinding.js)
-Icons from FlatIcon & FreeIcons (https://www.flaticon.com/, https://freeicons.io/)
+- PathFinding.js (https://github.com/qiao/PathFinding.js)
+- Icons from FlatIcon & FreeIcons (https://www.flaticon.com/, https://freeicons.io/)
