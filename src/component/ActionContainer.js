@@ -11,7 +11,9 @@ function ActionContainer({
   showInstructionHandleMouseEnter,
   showInstructionHandleMouseLeave,
   startGame,
-  startAIGame,
+  startAutoPlay,
+  manualPlay,
+  autoPlay,
 }) {
   return (
     <div className="action-container">
@@ -26,11 +28,21 @@ function ActionContainer({
         showInstructionHandleMouseLeave={showInstructionHandleMouseLeave}
       />
       <div className="button-container">
-        <button className="start-game-button" onClick={startGame}>
-          Start
+        <button
+          className={`start-game-button ${autoPlay ? "disabled" : ""}`}
+          onClick={startGame}
+          title="Click here to start the game"
+          disabled={autoPlay ? "disabled" : ""}
+        >
+          {manualPlay ? "Pause" : "Start"}
         </button>
-        <button className="ai-mode-button" onClick={startAIGame}>
-          AI Mode
+        <button
+          className={`auto-play-button ${manualPlay ? "disabled" : ""}`}
+          onClick={startAutoPlay}
+          title="click here to start the game in auto play mode"
+          disabled={manualPlay ? "disabled" : ""}
+        >
+          {autoPlay ? "Pause" : "Auto Play"}
         </button>
       </div>
     </div>

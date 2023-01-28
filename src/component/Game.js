@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import "./../style/Game.css";
 import ActionContainer from "./ActionContainer";
 import GameOver from "./GameOver";
+import StartGame from "./StartGame";
 
 import appleIcon from "./../icons/apple-20.png";
 import bananaIcon from "./../icons/banana-20.png";
@@ -39,7 +40,8 @@ function Game() {
   );
   const [foodEatenCount, setFoodEatenCount] = useState(0);
   const [specialFoodEatenCount, setSpecialFoodEatenCount] = useState(0);
-  const [aiMode, setAiMode] = useState(false);
+  const [autoPlay, setAutoPlay] = useState(false);
+  const [manualPlay, setManualPlay] = useState(false);
 
   // Set/resize canvas size
   useEffect(() => {
@@ -51,7 +53,7 @@ function Game() {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [window.innerWidth, window.innerHeight]);
+  }, []);
 
   // Set snake, food and special food on canvas
   useEffect(() => {
@@ -61,8 +63,8 @@ function Game() {
     context.fillStyle = "white";
     snake.forEach(([x, y]) => context.fillRect(x, y, 1, 1));
     if (gameStarted) {
-      if (aiMode) {
-        aiModePathFinder();
+      if (autoPlay) {
+        autoPlayPathFinder();
       }
       // Create a new image for food
       const foodImage = new Image();
@@ -87,7 +89,7 @@ function Game() {
     gameStarted,
     selectedFoodImage,
     selectedSpecialFoodImage,
-    aiMode,
+    autoPlay,
   ]);
 
   // Read arrow key press and start game
@@ -113,7 +115,8 @@ function Game() {
         e.keyCode === 39 ||
         e.keyCode === 40
       )
-        setGameStarted(true);
+        setManualPlay(true);
+      setGameStarted(true);
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => {
@@ -149,11 +152,6 @@ function Game() {
   useEffect(() => {
     if (!canvasRef.current) return;
     if (snake[0][0] === food[0] && snake[0][1] === food[1]) {
-      // // Sound effect when snake eats food
-      // const eatSound = document.getElementById("eat-sound");
-      // eatSound.currentTime = 0;
-      // eatSound.play();
-
       // Animate canvas when snake eats food
       setFoodEffect(true);
 
@@ -180,12 +178,18 @@ function Game() {
         setSelectedFoodImage(randomFoodImage);
       }
 
-      setFood([
-        Math.floor((Math.random() * canvasRef.current.width) / CELL_SIZE),
-        Math.floor((Math.random() * canvasRef.current.height) / CELL_SIZE),
-      ]);
       setSnake((prev) => prev.concat([snake[snake.length - 1]]));
-      setSpeed(!aiMode && speed > 30 ? speed - 10 : 30);
+      setSpeed(!autoPlay && speed > 30 ? speed - 10 : 30);
+      const foodPosition = generateFood();
+      if (
+        (foodPosition.x == null || foodPosition.x == undefined) &&
+        (foodPosition.y == null || foodPosition.y == undefined)
+      ) {
+        console.log(foodPosition);
+        setGameOver(true);
+      } else {
+        setFood([foodPosition.x, foodPosition.y]);
+      }
     }
   }, [
     snake,
@@ -199,7 +203,7 @@ function Game() {
     specialFoodImages,
     foodEatenCount,
     specialFoodEatenCount,
-    aiMode,
+    autoPlay,
   ]);
 
   // Animate when snake eats food
@@ -223,7 +227,7 @@ function Game() {
     ) {
       handleCollision();
     }
-    if (!aiMode) {
+    if (!autoPlay) {
       for (let i = 1; i < snake.length; i++) {
         if (
           snake[0][0] === snake[i][0] &&
@@ -237,7 +241,7 @@ function Game() {
   }, [
     snake,
     gameOver,
-    aiMode,
+    autoPlay,
     canvasRef.current?.width,
     canvasRef.current?.height,
   ]);
@@ -262,7 +266,7 @@ function Game() {
   useEffect(() => {
     if (gameOver) {
       clearInterval(intervalId);
-      setAiMode(false);
+      setAutoPlay(false);
     }
   }, [gameOver, intervalId]);
 
@@ -275,17 +279,34 @@ function Game() {
   }
 
   const handleStartGame = () => {
-    setGameStarted(true);
+    if (autoPlay) {
+      setAutoPlay(false);
+    }
+    if (manualPlay) {
+      setGameStarted(false);
+      setManualPlay(false);
+    } else {
+      setGameStarted(true);
+      setManualPlay(true);
+    }
     setDirection([1, 0]);
   };
 
-  const handleAIGame = () => {
-    setGameStarted(true);
-    setAiMode(true);
+  const handleAutoPlayGame = () => {
+    if (manualPlay) {
+      setManualPlay(false);
+    }
+    if (autoPlay) {
+      setGameStarted(false);
+      setAutoPlay(false);
+    } else {
+      setGameStarted(true);
+      setAutoPlay(true);
+    }
   };
 
-  // ai mode to find path between snake and food
-  function aiModePathFinder() {
+  // find path between snake and food to auto play game
+  function autoPlayPathFinder() {
     const grid = new PF.Grid(
       Math.floor(canvasRef.current.width),
       Math.floor(canvasRef.current.height)
@@ -321,13 +342,29 @@ function Game() {
         1
       );
     } else {
-      setAiMode(false);
+      setAutoPlay(false);
       setGameOver(true);
     }
   }
 
+  // Check to avoid placing food over snake body
+  function generateFood() {
+    let foodX, foodY;
+    do {
+      foodX = Math.floor((Math.random() * canvasRef.current.width) / CELL_SIZE);
+      foodY = Math.floor(
+        (Math.random() * canvasRef.current.height) / CELL_SIZE
+      );
+    } while (
+      snake.some((segment) => segment.x === foodX && segment.y === foodY)
+    );
+
+    return { x: foodX, y: foodY };
+  }
+
   return (
     <div className="container">
+      {!gameStarted ? <StartGame /> : ""}
       {gameOver && (
         <div className={gameOver ? "overlay" : "hidden"}>
           <GameOver score={score} />
@@ -347,9 +384,10 @@ function Game() {
         showInstructionHandleMouseEnter={showInstructionHandleMouseEnter}
         showInstructionHandleMouseLeave={showInstructionHandleMouseLeave}
         startGame={handleStartGame}
-        startAIGame={handleAIGame}
+        startAutoPlay={handleAutoPlayGame}
+        manualPlay={manualPlay}
+        autoPlay={autoPlay}
       />
-      {/* <audio id="eat-sound" src="./audio/eat-sound.mp3"></audio> */}
     </div>
   );
 }

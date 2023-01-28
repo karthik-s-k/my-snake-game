@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  z-index: 4;
 }
 
 .start-game-button {
@@ -18,19 +19,19 @@
   border: 1px solid #4caf50;
 }
 
-.ai-mode-button {
+.auto-play-button {
   background-color: black;
   color: #4caf50;
   border: 1px solid #ededed;
 }
-.ai-mode-button:hover {
+.auto-play-button:hover {
   background-color: #4caf50;
   color: black;
   border: 1px solid #4caf50;
 }
 
 .start-game-button,
-.ai-mode-button {
+.auto-play-button {
   width: 45%;
   min-width: 100px;
   max-width: 200px;
@@ -43,6 +44,12 @@
   transition: background-color 0.3s ease;
 }
 
+.start-game-button.disabled,
+.auto-play-button.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 @media (max-width: 1200px) {
   .button-container {
     flex-direction: column;
@@ -52,7 +59,7 @@
 
 @media (max-width: 700px) {
   .start-game-button,
-  .ai-mode-button {
+  .auto-play-button {
     min-width: 80px;
     max-width: 160px;
   }

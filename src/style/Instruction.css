@@ -1,4 +1,7 @@
 .instruction-container .instructions {
+  list-style-type: none; /* remove bullet points */
+  list-style-image: url("./../icons/snake-16.png");
+  background-size: cover; /* scale the image to fit the element */
   display: none;
   position: absolute;
   width: 55%;
@@ -10,7 +13,7 @@
   background-color: #ededed;
   border: 1px solid #4caf50;
   border-radius: 5px;
-  z-index: 2;
+  z-index: 4;
 }
 
 .instruction-container .instruction-icon {
@@ -18,6 +21,7 @@
   bottom: 15%;
   right: 2%;
   cursor: pointer;
+  z-index: 4;
 }
 
 .instruction-container .instructions.show {
