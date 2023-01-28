@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/the-great-munch/static/css/main.5a1b0ca6.css",
+    "main.js": "/the-great-munch/static/js/main.a1e5211e.js",
+    "static/js/787.12d954c3.chunk.js": "/the-great-munch/static/js/787.12d954c3.chunk.js",
+    "index.html": "/the-great-munch/index.html",
+    "main.5a1b0ca6.css.map": "/the-great-munch/static/css/main.5a1b0ca6.css.map",
+    "main.a1e5211e.js.map": "/the-great-munch/static/js/main.a1e5211e.js.map",
+    "787.12d954c3.chunk.js.map": "/the-great-munch/static/js/787.12d954c3.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5a1b0ca6.css",
+    "static/js/main.a1e5211e.js"
+  ]
+}
