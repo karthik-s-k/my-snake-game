@@ -2,6 +2,8 @@
 
 A fun snake-food game awaits players who take control of a snake that moves around the screen and eats food, with the ultimate goal of growing as long as possible without running into the walls or its own body. Built using React JS, this game utilizes the React hooks useState and useEffect to efficiently handle state updates and side effects.
 
+Try your hand at "The Great Munch" now by visiting the link: https://karthik-s-k.github.io/my-snake-game/
+
 Players can look forward to several exciting features, including:
 
 - Different types of food (fruits & special food) that, when consumed, cause the snake to grow in length and experience a boost in speed.
