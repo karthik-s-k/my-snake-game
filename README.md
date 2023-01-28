@@ -1,23 +1,22 @@
 # my-snake-game (The Great Munch)
 
-A fun snake-food game where the player controls a snake that moves around the screen and eats food, with the goal of growing as long as possible without running into the walls or its own body.
-The game is built in React JS, it uses the React hooks useState and useEffect to handle state updates and side effects.
+A fun snake-food game awaits players who take control of a snake that moves around the screen and eats food, with the ultimate goal of growing as long as possible without running into the walls or its own body. Built using React JS, this game utilizes the React hooks useState and useEffect to efficiently handle state updates and side effects.
 
-The game has several features such as,
+Players can look forward to several exciting features, including:
 
-- The size of the game canvas adjusts to the size of the browser window
-- The game has different types of food, some of which give a temporary boost of speed or make the snake grow faster
-- There is a game over state when the snake collides with the wall or its own body
-- The game has a score counter
-- The game has a option for auto play, where the snake moves automatically.
-- The game uses pathfinding library to find the shortest path to the food in auto play mode.
+- Different types of food (fruits & special food) that, when consumed, cause the snake to grow in length and experience a boost in speed.
+- The option to play using arrow keys from the keyboard, or use the automatic play feature, in which the snake moves on its own using a pathfinding library to find the shortest path to the food.
+- A dynamic game canvas that adjusts to the size of the browser window.
+- A score counter that displays the total score, number of fruits consumed, and number of special food consumed.
+- A game over state triggered when the snake collides with the wall or its own body.
+- Overall, this game offers a challenging and engaging experience for players of all skill levels.
 
 ## Getting Started
 
 To get started, simply clone or download the repository and run the game locally on your machine.
 
 git clone https://github.com/karthik-s-k/my-snake-game.git
-cd my-game
+cd my-snake-game
 
 ## Prerequisites
 
@@ -44,7 +43,16 @@ yarn start
 
 ## Deployment
 
-To deploy the game to a server, you can use a platform such as Heroku. First, create a new app on Heroku and link it to your Github repository. Then, set up the necessary environment variables and deploy the app.
+To deploy the game to GitHub pages, you need to build the project and push the built files to the gh-pages branch.
+
+npm run build
+or
+yarn build
+
+Then, switch to gh-pages branch and push the files
+
+git checkout gh-pages
+git push origin gh-pages
 
 ## Built With
 
@@ -57,8 +65,9 @@ To deploy the game to a server, you can use a platform such as Heroku. First, cr
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+Feel free to use the code.
 
-Credits
+## Credits
+
 PathFinding.js (https://github.com/qiao/PathFinding.js)
 Icons from FlatIcon & FreeIcons (https://www.flaticon.com/, https://freeicons.io/)

@@ -24,7 +24,7 @@ function Game() {
   const [score, setScore] = useState(0);
   const [gameStarted, setGameStarted] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
-  const [speed, setSpeed] = useState(70);
+  const [speed, setSpeed] = useState(75);
   const [specialFood, setSpecialFood] = useState(false);
   const [collisionAnimation, setCollisionAnimation] = useState(false);
   const [foodEffect, setFoodEffect] = useState(false);
@@ -179,13 +179,14 @@ function Game() {
       }
 
       setSnake((prev) => prev.concat([snake[snake.length - 1]]));
-      setSpeed(!autoPlay && speed > 30 ? speed - 10 : 30);
+      setSpeed(!autoPlay && speed > 30 ? speed - 5 : 30);
+
       const foodPosition = generateFood();
       if (
-        (foodPosition.x == null || foodPosition.x == undefined) &&
-        (foodPosition.y == null || foodPosition.y == undefined)
+        (foodPosition.x === null || foodPosition.x === undefined) &&
+        (foodPosition.y === null || foodPosition.y === undefined)
       ) {
-        console.log(foodPosition);
+        // when there is no space available to place food
         setGameOver(true);
       } else {
         setFood([foodPosition.x, foodPosition.y]);
