@@ -24,7 +24,7 @@ function Game() {
   const [score, setScore] = useState(0);
   const [gameStarted, setGameStarted] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
-  const [speed, setSpeed] = useState(75);
+  const [speed, setSpeed] = useState(100);
   const [specialFood, setSpecialFood] = useState(false);
   const [collisionAnimation, setCollisionAnimation] = useState(false);
   const [foodEffect, setFoodEffect] = useState(false);
@@ -287,6 +287,7 @@ function Game() {
       setGameStarted(false);
       setManualPlay(false);
     } else {
+      setSpeed(80);
       setGameStarted(true);
       setManualPlay(true);
     }
