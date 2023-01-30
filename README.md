@@ -49,7 +49,7 @@ npm start or yarn start
 To deploy the game to GitHub pages, you need to build the project and push the built files to the gh-pages branch.
 
 - npm run build or yarn build (to create package)
-- npm run deploy yarn deploy (to deploy the changes in github pages)
+- npm run deploy or yarn deploy (to deploy the changes in github pages)
 
 ## Built With
 
